@@ -1,26 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from 'react';
+import Chart from './components/Chart/Chart';
+import { Asset } from './interfaces/AssetInterfaces';
+import './App.scss';
+import { fetchAssetData } from './api/api';
+import {
+  formatNumberToAbbreviated,
+  formatNumberToPercentage,
+} from './utils/FormatterUtil';
+import { sortByDateAscending } from './utils/SortUtil';
 
-function App() {
+const App = () => {
+  const [data, setData] = useState<Asset>({} as Asset);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { assetId, aprHistory, tvlStakedHistory }: Asset =
+          await fetchAssetData();
+        setData({
+          assetId,
+          aprHistory: sortByDateAscending(aprHistory),
+          tvlStakedHistory: sortByDateAscending(tvlStakedHistory),
+        });
+      } catch (error) {
+        console.error('GetData Error : ', error);
+      }
+    })();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='flex-container'>
+      <Chart
+        title='Asset APR (y)'
+        data={data.aprHistory}
+        formatNumber={formatNumberToPercentage}
+      />
+      <Chart
+        title='Asset TVL'
+        data={data.tvlStakedHistory}
+        formatNumber={formatNumberToAbbreviated}
+      />
     </div>
   );
-}
+};
 
 export default App;
