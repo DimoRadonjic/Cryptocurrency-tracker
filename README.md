@@ -1,7 +1,5 @@
 # Cryptocurrency Tracker
 
-#### Example:
-
 An application used to track cryptocurrency data , built with React,  TypeScript, and SASS.
 
 ## Project Screen Shot
