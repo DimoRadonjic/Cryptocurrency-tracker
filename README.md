@@ -8,8 +8,6 @@ An application used to track cryptocurrency data , built with React,  TypeScript
 
 ## Installation and Setup Instructions
 
-#### Example:  
-
 Installation:
 
 `npm install`  
